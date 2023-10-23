@@ -1,8 +1,8 @@
 class Question{
-  String questionText="a";
-  bool questionAnswer=false;
+  late String questionText;
+  late bool questionAnswer;
 
-  Question({required String q, required bool a}){
+  Question(String q, bool a){
       questionText = q;
       questionAnswer = a;
   }

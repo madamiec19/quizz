@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'Question.dart';
+import 'package:quizz/QuizGame.dart';
 
 void main() => runApp(Quizzler());
+
+QuizGame quizGame = QuizGame();
+
 
 class Quizzler extends StatelessWidget {
   @override
@@ -27,19 +30,25 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper = [];
-  List<Question> questions = [
-    Question(q: 'You can lead a cow down stairs but not up stairs.', a: false),
-    Question(
-        q: 'Approximately one quarter of human bones are in the feet.',
-        a: true),
-    Question(q: 'A slug\'s blood is green.', a: true)
-  ];
 
-  int questionNumber = 0;
 
   @override
   Widget build(BuildContext context) {
+    List<Icon> scoreKeeper = [];
+
+    for (var result in quizGame.scoreKeeper){
+      if(result == true){
+        scoreKeeper.add(const Icon(
+          Icons.check,
+          color: Colors.green,
+        ));
+      } else {
+        scoreKeeper.add(const Icon(
+          Icons.cancel,
+          color: Colors.red,
+        ));
+      }
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -51,7 +60,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[questionNumber].questionText,
+                quizGame.getActualQuestionText(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -76,18 +85,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    if(questions[questionNumber].questionAnswer == true){
-                      scoreKeeper.add(const Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ));
-                    } else {
-                      scoreKeeper.add(const Icon(
-                        Icons.cancel,
-                        color: Colors.red,
-                      ));
-                    }
-                    questionNumber++;
+                    quizGame.checkQuestion(true);
                   });
                 },
               ),
@@ -109,18 +107,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   setState(() {
-                    if(questions[questionNumber].questionAnswer == false){
-                      scoreKeeper.add(const Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ));
-                    } else {
-                      scoreKeeper.add(const Icon(
-                        Icons.cancel,
-                        color: Colors.red,
-                      ));
-                    }
-                    questionNumber++;
+                    quizGame.checkQuestion(false);
                   });
                 },
               ),
